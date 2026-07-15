@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEX-TECH Private Wealth Portal</title>
+    <link rel="icon" type="image/jpeg" href="icon.jpg">
+    <link rel="apple-touch-icon" href="icon.jpg">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+            --accent-amber: #f59e0b;
+            --row-hover: rgba(59, 130, 246, 0.04);
+            --row-stripe: rgba(255, 255, 255, 0.015);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(45, 212, 191, 0.18), transparent 28%),
+                radial-gradient(circle at top right, rgba(74, 163, 255, 0.18), transparent 30%),
+                radial-gradient(circle at bottom left, rgba(251, 191, 36, 0.10), transparent 28%),
+                linear-gradient(145deg, #07111f 0%, #0b1729 46%, #10213a 100%);
+            background-size: 130% 130%;
+            background-attachment: fixed;
+            background-position: 50% 50%;
+            color: #f8fafc;
+            margin: 0;
+            padding: 24px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            isolation: isolate;
+            overflow-x: hidden;
+            animation: backgroundShift 54s ease-in-out infinite alternate;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 1000px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 20px;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .logo-icon:hover { transform: scale(1.05); }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.025em;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-text p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin: 4px 0 0 0;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-action {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.82rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+        }
+
+        .btn-action:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .top-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .metric-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            border-radius: 4px 0 0 4px;
+        }
+
+        .card-blue::before { background: #3b82f6; }
+        .card-green::before { background: #10b981; }
+        .card-purple::before { background: #8b5cf6; }
+
+        .metric-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 0.05em;
+        }
+
+        .metric-value {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-top: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .chart-card {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chart-card:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .chart-card .metric-label {
+            margin-bottom: 10px;
+        }
+
+        #mini-chart {
+            width: 100%;
+            flex: 1;
+            min-height: 100px;
+            border-radius: 6px;
+        }
+
+        .table-section {
+            background: rgba(15, 23, 42, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .table-section .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .table-section .chart-header h3 {
+            margin: 0;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 0.05em;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            align-items: center;
+        }
+
+        .search-input {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 0.82rem;
+            transition: border-color 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .search-input::placeholder { color: #64748b; }
+
+        .table-container {
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        thead { position: sticky; top: 0; z-index: 1; }
+
+        th {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.9));
+            padding: 12px 16px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #94a3b8;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            white-space: nowrap;
+            user-select: none;
+        }
+
+        th.sortable {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        th.sortable:hover { color: #f8fafc; }
+
+        th .sort-arrow {
+            display: inline-block;
+            margin-left: 4px;
+            opacity: 0.3;
+            font-size: 0.6rem;
+        }
+
+        th.sortable:hover .sort-arrow { opacity: 0.7; }
+
+        th .sort-arrow.active { opacity: 1; color: #3b82f6; }
+
+        td {
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            color: #f8fafc;
+            vertical-align: middle;
+        }
+
+        tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.015); }
+        tr:last-child td { border-bottom: none; }
+        tbody tr { transition: background 0.15s; }
+        tbody tr:hover td { background: rgba(59, 130, 246, 0.04); }
+
+        .investor-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .investor-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+        }
+
+        .investor-name {
+            font-weight: 600;
+            color: #f8fafc;
+            font-size: 0.85rem;
+        }
+
+        .deposit-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(16, 185, 129, 0.05));
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .deposit-badge:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+            border-color: #10b981;
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .total-investment-val {
+            font-weight: 800;
+            color: #38bdf8;
+            font-variant-numeric: tabular-nums;
+            font-size: 0.85rem;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+        }
+
+        .btn-icon {
+            padding: 5px 7px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #94a3b8;
+        }
+
+        .btn-icon:hover { transform: scale(1.1); }
+
+        .btn-icon-edit { color: #3b82f6; }
+        .btn-icon-edit:hover { background: rgba(59, 130, 246, 0.15); }
+
+        .btn-icon-history { color: #8b5cf6; }
+        .btn-icon-history:hover { background: rgba(139, 92, 246, 0.15); }
+
+        .btn-icon-danger {
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            padding: 5px 8px;
+            border-radius: 5px;
+        }
+
+        .btn-icon-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #94a3b8;
+        }
+
+        .empty-state-icon { font-size: 2rem; margin-bottom: 10px; opacity: 0.5; }
+        .empty-state-text { font-size: 0.9rem; margin: 0; }
+        .empty-state-hint { font-size: 0.78rem; color: rgba(148, 163, 184, 0.6); margin: 4px 0 0 0; }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes backgroundShift {
+            0% { background-position: 46% 38%; }
+            50% { background-position: 54% 50%; }
+            100% { background-position: 48% 42%; }
+        }
+        @keyframes backgroundFloat {
+            0% { transform: translate3d(-0.6%, -0.4%, 0) scale(1); opacity: 0.45; }
+            50% { transform: translate3d(0.7%, 0.8%, 0) scale(1.02); opacity: 0.58; }
+            100% { transform: translate3d(-0.2%, 0.6%, 0) scale(1.01); opacity: 0.5; }
+        }
+        @keyframes containerGlow {
+            0% { transform: translateX(-0.6%); opacity: 0.65; }
+            100% { transform: translateX(0.6%); opacity: 0.85; }
+        }
+        @keyframes orbDriftA {
+            0% { transform: translate3d(-2%, 0, 0) scale(1); }
+            100% { transform: translate3d(3%, 2%, 0) scale(1.08); }
+        }
+        @keyframes orbDriftB {
+            0% { transform: translate3d(2%, -1%, 0) scale(1); }
+            100% { transform: translate3d(-3%, 2%, 0) scale(1.06); }
+        }
+        @keyframes orbDriftC {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            100% { transform: translate3d(0, -2%, 0) scale(1.05); }
+        }
+
+        .modal-overlay { animation: fadeIn 0.2s ease; }
+
+        .modal-card {
+            background: linear-gradient(180deg, #1e293b, #0f172a);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            padding: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            animation: slideUp 0.25s ease;
+        }
+
+        .modal-card.wide { max-width: 520px; }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover { color: #f8fafc; }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            letter-spacing: 0.05em;
+        }
+
+        .form-group input {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: white;
+            font-size: 0.95rem;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-modal {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-cancel {
+            background: rgba(255, 255, 255, 0.05);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-modal-cancel:hover { background: rgba(255, 255, 255, 0.1); }
+
+        .btn-modal-save {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-modal-save:hover {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-modal-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-modal-danger:hover {
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .tx-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 16px 0;
+        }
+
+        .tx-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .tx-item:last-child { border-bottom: none; }
+
+        .tx-amount { font-weight: 700; color: #10b981; }
+        .tx-date { font-size: 0.8rem; color: #94a3b8; }
+
+        .tx-type {
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tx-type-deposit { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+        .tx-type-initial { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+
+        .confirm-text {
+            text-align: center;
+            padding: 20px 0;
+            font-size: 1rem;
+            color: #f8fafc;
+            line-height: 1.5;
+        }
+
+        .confirm-text .confirm-name { font-weight: 700; color: #ef4444; }
+
+        .key-hint {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 640px) {
+            body { padding: 12px; }
+            .app-container { padding: 16px; }
+            .top-row { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .chart-card { min-height: 160px; }
+            header { flex-direction: column; gap: 16px; }
+            .header-actions { width: 100%; }
+            .btn-action { flex: 1; justify-content: center; font-size: 0.75rem; padding: 8px 12px; }
+            th, td { padding: 8px; }
+            .investor-avatar { display: none; }
+            .toolbar { flex-direction: column; }
+            .search-input { width: 100%; }
+            body::after { inset: -10vh; filter: blur(36px); opacity: 0.55; }
+            .bg-orb-a, .bg-orb-b, .bg-orb-c { opacity: 0.35; filter: blur(18px); }
+        }
+    </style>
+
+    <style>
+        body {
+            font-family: "Aptos", "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at top left, rgba(45, 212, 191, 0.18), transparent 28%),
+                radial-gradient(circle at top right, rgba(74, 163, 255, 0.18), transparent 30%),
+                radial-gradient(circle at bottom left, rgba(251, 191, 36, 0.10), transparent 28%),
+                linear-gradient(145deg, #07111f 0%, #0b1729 46%, #10213a 100%);
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+            background-size: 72px 72px;
+            opacity: 0.16;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            inset: -18vh;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(circle at 20% 25%, rgba(74, 163, 255, 0.16), transparent 0 24%),
+                radial-gradient(circle at 80% 18%, rgba(45, 212, 191, 0.14), transparent 0 22%),
+                radial-gradient(circle at 55% 82%, rgba(139, 92, 246, 0.10), transparent 0 26%);
+            filter: blur(62px);
+            opacity: 0.58;
+            transform: translate3d(0, 0, 0) scale(1);
+            animation: backgroundFloat 30s ease-in-out infinite alternate;
+        }
+
+        .bg-orb {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            border-radius: 999px;
+            filter: blur(24px);
+            mix-blend-mode: screen;
+            opacity: 0.7;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .bg-orb-a {
+            top: 8vh;
+            left: -6vw;
+            width: 22vw;
+            height: 22vw;
+            min-width: 220px;
+            min-height: 220px;
+            background: radial-gradient(circle, rgba(74, 163, 255, 0.34) 0%, rgba(74, 163, 255, 0.12) 38%, transparent 72%);
+            animation: orbDriftA 24s ease-in-out infinite alternate;
+        }
+
+        .bg-orb-b {
+            top: 44vh;
+            right: -8vw;
+            width: 26vw;
+            height: 26vw;
+            min-width: 260px;
+            min-height: 260px;
+            background: radial-gradient(circle, rgba(45, 212, 191, 0.28) 0%, rgba(45, 212, 191, 0.10) 40%, transparent 72%);
+            animation: orbDriftB 30s ease-in-out infinite alternate;
+        }
+
+        .bg-orb-c {
+            bottom: -10vh;
+            left: 34vw;
+            width: 18vw;
+            height: 18vw;
+            min-width: 180px;
+            min-height: 180px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.24) 0%, rgba(139, 92, 246, 0.09) 36%, transparent 72%);
+            animation: orbDriftC 28s ease-in-out infinite alternate;
+        }
+
+        .app-container {
+            max-width: 1240px;
+            border-radius: 28px;
+            padding: 28px;
+            background: linear-gradient(180deg, rgba(10, 19, 34, 0.92), rgba(8, 15, 28, 0.94));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .app-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(74, 163, 255, 0.08), transparent 28%, transparent 72%, rgba(45, 212, 191, 0.05));
+            background-size: 220% 220%;
+            pointer-events: none;
+            animation: containerGlow 28s ease-in-out infinite alternate;
+        }
+
+        header, .top-row, .table-section {
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            margin-bottom: 18px;
+            padding-bottom: 18px;
+        }
+
+        .logo-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+        }
+
+        .logo-text h1 {
+            font-size: clamp(1.4rem, 2vw, 2rem);
+            letter-spacing: -0.05em;
+        }
+
+        .logo-text p {
+            margin-top: 7px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .top-row {
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 18px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card, .chart-card, .table-section, .modal-card {
+            border-radius: 24px;
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+        }
+
+        .metric-card {
+            min-height: 148px;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(10, 18, 32, 0.98));
+            padding: 22px;
+        }
+
+        .metric-value {
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            letter-spacing: -0.05em;
+        }
+
+        .chart-card {
+            min-height: 228px;
+            padding: 22px;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(10, 18, 32, 0.98));
+        }
+
+        .table-section {
+            padding: 22px;
+            background: linear-gradient(180deg, rgba(10, 19, 34, 0.95), rgba(8, 15, 28, 0.98));
+        }
+
+        .search-input {
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.08);
+            padding: 12px 14px;
+        }
+
+        .table-container {
+            border-radius: 18px;
+            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        th {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(10, 18, 32, 0.98));
+            padding: 15px 16px;
+            letter-spacing: 0.14em;
+        }
+
+        td {
+            padding: 15px 16px;
+            background: rgba(255, 255, 255, 0.01);
+        }
+
+        tbody tr:nth-child(even) td { background: rgba(255, 255, 255, 0.018); }
+        tbody tr:hover td { background: rgba(74, 163, 255, 0.06); }
+
+        .investor-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #4aa3ff, #34d399);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .deposit-badge {
+            border-radius: 999px;
+            padding: 7px 12px;
+            background: linear-gradient(135deg, rgba(52, 211, 153, 0.14), rgba(45, 212, 191, 0.08));
+            border-color: rgba(52, 211, 153, 0.22);
+            color: #6ee7b7;
+        }
+
+        .btn-action {
+            border-radius: 999px;
+            padding: 11px 16px;
+            font-weight: 800;
+        }
+
+        .btn-primary {
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.28);
+        }
+
+        .btn-icon {
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .btn-modal {
+            border-radius: 14px;
+            font-weight: 800;
+        }
+
+        .modal-overlay {
+            background: rgba(3, 8, 20, 0.76);
+            backdrop-filter: blur(12px);
+            padding: 18px;
+        }
+
+        .modal-card {
+            padding: 26px;
+            background: linear-gradient(180deg, rgba(12, 21, 38, 0.98), rgba(8, 15, 28, 0.98));
+        }
+
+        .form-group input {
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .tx-item {
+            padding: 12px 0;
+        }
+
+        .confirm-text .confirm-name { color: #f87171; }
+
+        @media (max-width: 980px) {
+            .top-row { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+            .table-section, .chart-card { padding: 16px; }
+            .modal-card { padding: 20px; }
+            .modal-actions { flex-direction: column; }
+            .btn-action { flex: 1; justify-content: center; }
+            .investor-avatar { display: none; }
+            .actions-cell { justify-content: flex-start; }
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="bg-orb bg-orb-a"></div>
+    <div class="bg-orb bg-orb-b"></div>
+    <div class="bg-orb bg-orb-c"></div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo-area">
+                <img src="icon.jpg" alt="GEX TECH" class="logo-icon">
+                <div class="logo-text">
+                    <h1>GEX TECH</h1>
+                    <p>YOUR FUTURE BELONG HERE</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-action btn-secondary" onclick="exportCSV()" title="Download CSV">⬇ CSV</button>
+                <button class="btn-action btn-primary" onclick="requireKeyThen(openAddInvestorModal)">+ Add Investor</button>
+            </div>
+        </header>
+
+
+        <div class="top-row">
+            <section class="metrics-grid">
+                <div class="metric-card card-blue">
+                    <div class="metric-label">Total Under Management</div>
+                    <div class="metric-value" id="metric-total-aum">Kshs 0.00</div>
+                </div>
+                <div class="metric-card card-purple">
+                    <div class="metric-label">Total Investors</div>
+                    <div class="metric-value" id="metric-investor-count">0</div>
+                </div>
+            </section>
+            <div class="chart-card">
+                <div class="metric-label">Portfolio Distribution</div>
+                <canvas id="mini-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <div class="chart-header">
+                <h3>Investor Ledger</h3>
+            </div>
+            <div class="toolbar">
+                <input type="text" class="search-input" id="search-input" placeholder="Search investors..." oninput="render()">
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="sortable" onclick="sortBy('name')">Investor <span class="sort-arrow" id="sort-name">▲</span></th>
+                            <th class="sortable" onclick="sortBy('latestDeposit')">Latest Deposit <span class="sort-arrow" id="sort-latestDeposit">▲</span></th>
+                            <th class="sortable" onclick="sortBy('totalInvestment')">Total Capital <span class="sort-arrow" id="sort-totalInvestment">▲</span></th>
+                            <th style="width: 120px; text-align: center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="investor-rows"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="key-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Edit Access Required</h3>
+                <button class="modal-close" onclick="closeModal('key-modal')">✕</button>
+            </div>
+            <p style="color:#94a3b8;font-size:0.85rem;margin:0 0 16px;">Enter the edit key to make changes to investor records.</p>
+            <div class="form-group">
+                <label>Edit Key</label>
+                <input type="password" id="key-input" placeholder="Enter key" onkeydown="if(event.key==='Enter')submitKey()">
+            </div>
+            <div id="key-error" style="color:#ef4444;font-size:0.8rem;display:none;margin-bottom:8px;">Incorrect key. Try again.</div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-cancel" onclick="closeModal('key-modal')">Cancel</button>
+                <button class="btn-modal btn-modal-save" onclick="submitKey()">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deposit-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modal-title">Record New Transaction</h3>
+                    <p id="modal-subtitle" style="font-size: 0.8rem; color: #94a3b8; margin: 4px 0 0 0;"></p>
+                </div>
+                <button class="modal-close" onclick="closeModal('deposit-modal')">✕</button>
+            </div>
+            <input type="hidden" id="edit-investor-id">
+            <div class="form-group">
+                <label>Deposit Amount (Kshs)</label>
+                <input type="number" id="form-amount" placeholder="e.g. 50000" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Transaction Date</label>
+                <input type="date" id="form-date">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-cancel" onclick="closeModal('deposit-modal')">Cancel</button>
+                <button class="btn-modal btn-modal-save" onclick="saveTransaction()">Commit Ledger</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-investor-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Register New Investor</h3>
+                <button class="modal-close" onclick="closeModal('add-investor-modal')">✕</button>
+            </div>
+            <div class="form-group">
+                <label>Full Legal Name</label>
+                <input type="text" id="add-name" placeholder="John Doe">
+            </div>
+            <div class="form-group">
+                <label>Initial Capital (Kshs)</label>
+                <input type="number" id="add-init-deposit" placeholder="0.00" value="0" step="0.01">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-cancel" onclick="closeModal('add-investor-modal')">Cancel</button>
+                <button class="btn-modal btn-modal-save" onclick="addNewInvestor()">Create Record</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="rename-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Rename Investor</h3>
+                <button class="modal-close" onclick="closeModal('rename-modal')">✕</button>
+            </div>
+            <input type="hidden" id="rename-investor-id">
+            <div class="form-group">
+                <label>New Name</label>
+                <input type="text" id="rename-name" placeholder="Enter new name">
+            </div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-cancel" onclick="closeModal('rename-modal')">Cancel</button>
+                <button class="btn-modal btn-modal-save" onclick="saveRename()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="history-modal" class="modal-overlay">
+        <div class="modal-card wide">
+            <div class="modal-header">
+                <div>
+                    <h3 id="history-title">Transaction History</h3>
+                    <p id="history-subtitle" style="font-size: 0.8rem; color: #94a3b8; margin: 4px 0 0 0;"></p>
+                </div>
+                <button class="modal-close" onclick="closeModal('history-modal')">✕</button>
+            </div>
+            <div id="history-list" class="tx-list"></div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-cancel" onclick="closeModal('history-modal')" style="flex: 0 0 auto; padding: 10px 24px;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Confirm Action</h3>
+                <button class="modal-close" onclick="closeModal('confirm-modal')">✕</button>
+            </div>
+            <div id="confirm-text" class="confirm-text"></div>
+            <div class="modal-actions">
+                <button class="btn-modal btn-modal-cancel" onclick="closeModal('confirm-modal')">Cancel</button>
+                <button class="btn-modal btn-modal-danger" id="confirm-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const EDIT_KEY = 'K9#mL2$pX7&vN4@wQ8!zR5%jB1^yC6*hT3';
+        let state = { investors: [] };
+        let sortField = null;
+        let sortDir = 'asc';
+        let pendingDeleteId = null;
+        let pendingAction = null;
+
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, ch => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            })[ch]);
+        }
+
+        function csvEscape(value) {
+            return `"${String(value ?? '').replace(/"/g, '""')}"`;
+        }
+
+        function normalizeInvestor(inv) {
+            const today = new Date().toISOString().split('T')[0];
+            const txs = Array.isArray(inv.transactions)
+                ? inv.transactions.map(tx => ({
+                    amount: Number(tx?.amount) || 0,
+                    date: tx?.date || today,
+                    type: tx?.type || 'initial'
+                }))
+                : [];
+
+            const computedTotal = txs.reduce((sum, tx) => sum + (Number(tx.amount) || 0), 0);
+            const totalInvestment = Number.isFinite(Number(inv.totalInvestment))
+                ? Number(inv.totalInvestment)
+                : computedTotal;
+            const latestDeposit = Number.isFinite(Number(inv.latestDeposit))
+                ? Number(inv.latestDeposit)
+                : (txs[txs.length - 1]?.amount || totalInvestment || 0);
+
+            return {
+                ...inv,
+                latestDeposit,
+                totalInvestment,
+                transactions: txs.length > 0 ? txs : [{ amount: totalInvestment, date: today, type: 'initial' }]
+            };
+        }
+
+        function initApp() {
+            const savedState = localStorage.getItem('gex_tech_portal_state');
+            if (savedState) {
+                try {
+                    state = JSON.parse(savedState);
+                } catch(e) {
+                    state = { investors: [] };
+                }
+            }
+            if (!state.investors) state.investors = [];
+            state.investors = state.investors.map(normalizeInvestor);
+            migrateTransactions();
+            saveState();
+            render();
+            drawMiniChart();
+        }
+
+        function migrateTransactions() {
+            state.investors.forEach(inv => {
+                if (!inv.transactions) {
+                    inv.transactions = [{
+                        amount: inv.totalInvestment,
+                        date: new Date().toISOString().split('T')[0],
+                        type: 'initial'
+                    }];
+                }
+            });
+        }
+
+        function saveState() {
+            localStorage.setItem('gex_tech_portal_state', JSON.stringify(state));
+        }
+
+        function isKeyVerified() {
+            return localStorage.getItem('gex_edit_key_verified') === 'true';
+        }
+
+        function requireKeyThen(fn) {
+            if (isKeyVerified()) {
+                fn();
+                return;
+            }
+            pendingAction = fn;
+            document.getElementById('key-input').value = '';
+            document.getElementById('key-error').style.display = 'none';
+            document.getElementById('key-modal').style.display = 'flex';
+            setTimeout(() => document.getElementById('key-input').focus(), 100);
+        }
+
+        function submitKey() {
+            const key = document.getElementById('key-input').value.trim();
+            if (key === EDIT_KEY) {
+                localStorage.setItem('gex_edit_key_verified', 'true');
+                closeModal('key-modal');
+                if (pendingAction) {
+                    pendingAction();
+                    pendingAction = null;
+                }
+            } else {
+                document.getElementById('key-error').style.display = 'block';
+                document.getElementById('key-input').value = '';
+                document.getElementById('key-input').focus();
+            }
+        }
+
+        function getInitials(name) {
+            return String(name || '')
+                .split(/\s+/)
+                .filter(Boolean)
+                .map(w => w[0])
+                .join('')
+                .toUpperCase()
+                .slice(0, 2) || '?';
+        }
+
+        function getFilteredInvestors() {
+            const q = (document.getElementById('search-input').value || '').toLowerCase().trim();
+            let list = state.investors;
+            if (q) {
+                list = list.filter(inv => inv.name.toLowerCase().includes(q));
+            }
+            if (sortField) {
+                list = [...list].sort((a, b) => {
+                    let va = a[sortField], vb = b[sortField];
+                    if (sortField === 'latestDeposit' || sortField === 'totalInvestment') {
+                        va = Number(va) || 0;
+                        vb = Number(vb) || 0;
+                    } else if (typeof va === 'string') {
+                        va = va.toLowerCase();
+                        vb = (vb || '').toLowerCase();
+                    }
+                    if (va < vb) return sortDir === 'asc' ? -1 : 1;
+                    if (va > vb) return sortDir === 'asc' ? 1 : -1;
+                    return 0;
+                });
+            }
+            return list;
+        }
+
+        function sortBy(field) {
+            if (sortField === field) {
+                sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortField = field;
+                sortDir = 'asc';
+            }
+            document.querySelectorAll('.sort-arrow').forEach(el => el.classList.remove('active'));
+            const arrow = document.getElementById(`sort-${field}`);
+            if (arrow) {
+                arrow.textContent = sortDir === 'asc' ? '▲' : '▼';
+                arrow.classList.add('active');
+            }
+            render();
+        }
+
+        function render() {
+            const tbody = document.getElementById('investor-rows');
+            tbody.innerHTML = '';
+
+            const list = getFilteredInvestors();
+            let totalAUM = 0;
+
+            if (list.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📋</div>
+                                <p class="empty-state-text">${state.investors.length === 0 ? 'No investors registered yet' : 'No investors match your search'}</p>
+                                <p class="empty-state-hint">${state.investors.length === 0 ? 'Click "+ Add Investor" to get started' : 'Try a different name'}</p>
+                            </div>
+                        </td>
+                    </tr>`;
+            } else {
+                list.forEach((inv, index) => {
+                    totalAUM += Number(inv.totalInvestment) || 0;
+
+                    const tr = document.createElement('tr');
+                    tr.style.animation = `slideUp 0.3s ease ${index * 0.03}s both`;
+                    tr.innerHTML = `
+                        <td>
+                            <div class="investor-cell">
+                                <div class="investor-avatar">${getInitials(inv.name)}</div>
+                                <span class="investor-name">${escapeHtml(inv.name)}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="deposit-badge" onclick="requireKeyThen(() => openDepositModal(${inv.id}))">
+                                Kshs ${inv.latestDeposit.toLocaleString(undefined, {minimumFractionDigits: 2})}
+                            </button>
+                        </td>
+                        <td class="total-investment-val">Kshs ${inv.totalInvestment.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                        <td style="text-align: center;">
+                            <div class="actions-cell">
+                                <button class="btn-icon btn-icon-history" onclick="openHistoryModal(${inv.id})" title="Transaction history">📋</button>
+                                <button class="btn-icon btn-icon-edit" onclick="requireKeyThen(() => openRenameModal(${inv.id}))" title="Rename">✎</button>
+                                <button class="btn-icon btn-icon-danger" data-name="${escapeHtml(inv.name)}" onclick="requireKeyThen(() => confirmDelete(${inv.id}, this.dataset.name))" title="Delete">✕</button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('metric-total-aum').innerText = 'Kshs ' + totalAUM.toLocaleString(undefined, {minimumFractionDigits: 2});
+            document.getElementById('metric-investor-count').innerText = state.investors.length;
+
+            drawMiniChart();
+        }
+
+        function openDepositModal(id) {
+            const investor = state.investors.find(i => i.id === id);
+            if (!investor) return;
+            document.getElementById('edit-investor-id').value = id;
+            document.getElementById('modal-title').innerText = `Update: ${investor.name}`;
+            document.getElementById('modal-subtitle').innerText = 'Record a new deposit transaction';
+            document.getElementById('form-amount').value = '';
+            document.getElementById('form-date').value = new Date().toISOString().split('T')[0];
+            document.getElementById('deposit-modal').style.display = 'flex';
+        }
+
+        function openAddInvestorModal() {
+            document.getElementById('add-name').value = '';
+            document.getElementById('add-init-deposit').value = '';
+            document.getElementById('add-investor-modal').style.display = 'flex';
+        }
+
+        function openRenameModal(id) {
+            const investor = state.investors.find(i => i.id === id);
+            if (!investor) return;
+            document.getElementById('rename-investor-id').value = id;
+            document.getElementById('rename-name').value = investor.name;
+            document.getElementById('rename-modal').style.display = 'flex';
+        }
+
+        function openHistoryModal(id) {
+            const investor = state.investors.find(i => i.id === id);
+            if (!investor) return;
+            document.getElementById('history-title').innerText = `History: ${investor.name}`;
+            document.getElementById('history-subtitle').innerText = `${(investor.transactions || []).length} transaction(s)`;
+
+            const list = document.getElementById('history-list');
+            list.innerHTML = '';
+
+            const txs = investor.transactions || [];
+            if (txs.length === 0) {
+                list.innerHTML = '<div style="text-align:center;padding:20px;color:#94a3b8;">No transactions recorded</div>';
+            } else {
+                [...txs].reverse().forEach(tx => {
+                    const div = document.createElement('div');
+                    div.className = 'tx-item';
+                    div.innerHTML = `
+                        <div>
+                            <div style="font-weight:600;">Kshs ${tx.amount.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
+                            <div class="tx-date">${tx.date}</div>
+                        </div>
+                        <span class="tx-type tx-type-${tx.type}">${tx.type}</span>
+                    `;
+                    list.appendChild(div);
+                });
+            }
+
+            document.getElementById('history-modal').style.display = 'flex';
+        }
+
+        function confirmDelete(id, name) {
+            pendingDeleteId = id;
+            document.getElementById('confirm-text').innerHTML = `Are you sure you want to delete <span class="confirm-name">${escapeHtml(name)}</span>?<br><br>This action cannot be undone.`;
+            document.getElementById('confirm-btn').onclick = function() {
+                state.investors = state.investors.filter(i => i.id !== pendingDeleteId);
+                saveState();
+                render();
+                closeModal('confirm-modal');
+                pendingDeleteId = null;
+            };
+            document.getElementById('confirm-modal').style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function saveTransaction() {
+            const id = parseInt(document.getElementById('edit-investor-id').value);
+            const amount = parseFloat(document.getElementById('form-amount').value) || 0;
+            const date = document.getElementById('form-date').value || new Date().toISOString().split('T')[0];
+
+            if (amount <= 0) {
+                alert('Please enter a valid deposit amount.');
+                return;
+            }
+
+            state.investors = state.investors.map(inv => {
+                if (inv.id === id) {
+                    if (!inv.transactions) inv.transactions = [];
+                    inv.transactions.push({ amount, date, type: 'deposit' });
+                    return {
+                        ...inv,
+                        latestDeposit: amount,
+                        totalInvestment: inv.totalInvestment + amount
+                    };
+                }
+                return inv;
+            });
+
+            saveState();
+            render();
+            closeModal('deposit-modal');
+        }
+
+        function addNewInvestor() {
+            const name = document.getElementById('add-name').value.trim();
+            const initDeposit = parseFloat(document.getElementById('add-init-deposit').value) || 0;
+
+            if (!name) {
+                alert('Please provide a name.');
+                return;
+            }
+            if (initDeposit < 0) {
+                alert('Initial capital cannot be negative.');
+                return;
+            }
+
+            const newInv = {
+                id: Date.now(),
+                name: name,
+                latestDeposit: initDeposit,
+                totalInvestment: initDeposit,
+                transactions: [{ amount: initDeposit, date: new Date().toISOString().split('T')[0], type: 'initial' }]
+            };
+
+            state.investors.push(newInv);
+            saveState();
+            render();
+            closeModal('add-investor-modal');
+        }
+
+        function saveRename() {
+            const id = parseInt(document.getElementById('rename-investor-id').value);
+            const name = document.getElementById('rename-name').value.trim();
+            if (!name) { alert('Please enter a name.'); return; }
+
+            state.investors = state.investors.map(inv =>
+                inv.id === id ? { ...inv, name } : inv
+            );
+            saveState();
+            render();
+            closeModal('rename-modal');
+        }
+
+        function exportCSV() {
+            if (state.investors.length === 0) {
+                alert('No investors to export.');
+                return;
+            }
+            let csv = 'Name,Latest Deposit (Kshs),Total Capital (Kshs),Transactions\n';
+            state.investors.forEach(inv => {
+                const txs = (inv.transactions || []).length;
+                csv += `${csvEscape(inv.name)},${Number(inv.latestDeposit) || 0},${Number(inv.totalInvestment) || 0},${txs}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'gex_investors.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function drawMiniChart() {
+            const canvas = document.getElementById('mini-chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            if (rect.width === 0 || rect.height === 0) return;
+            canvas.width = rect.width * dpr;
+            canvas.height = rect.height * dpr;
+            ctx.scale(dpr, dpr);
+            const w = rect.width;
+            const h = rect.height;
+
+            ctx.clearRect(0, 0, w, h);
+
+            const investors = state.investors || [];
+            if (investors.length === 0) {
+                ctx.fillStyle = '#64748b';
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('No data', w / 2, h / 2);
+                return;
+            }
+
+            const sorted = [...investors].sort((a, b) => b.totalInvestment - a.totalInvestment);
+            const maxVal = sorted[0].totalInvestment || 1;
+            const barCount = Math.min(sorted.length, 6);
+            const gap = 10;
+            const barWidth = (w - gap * (barCount + 1)) / barCount;
+            const labelH = 18;
+            const chartH = h - labelH - 6;
+
+            const colors = ['#3b82f6', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444', '#06b6d4'];
+
+            sorted.slice(0, barCount).forEach((inv, i) => {
+                const barH = Math.max(4, (inv.totalInvestment / maxVal) * (chartH - 10));
+                const x = gap + i * (barWidth + gap);
+                const y = chartH - barH;
+
+                const grad = ctx.createLinearGradient(x, y, x, chartH);
+                grad.addColorStop(0, colors[i % colors.length]);
+                grad.addColorStop(1, colors[i % colors.length] + '30');
+                ctx.fillStyle = grad;
+
+                ctx.beginPath();
+                const r = 3;
+                ctx.moveTo(x + r, y);
+                ctx.lineTo(x + barWidth - r, y);
+                ctx.quadraticCurveTo(x + barWidth, y, x + barWidth, y + r);
+                ctx.lineTo(x + barWidth, chartH);
+                ctx.lineTo(x, chartH);
+                ctx.lineTo(x, y + r);
+                ctx.quadraticCurveTo(x, y, x + r, y);
+                ctx.fill();
+
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = '10px Inter, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'top';
+                const label = inv.name.length > 10 ? inv.name.slice(0, 9) + '…' : inv.name;
+                ctx.fillText(label, x + barWidth / 2, chartH + 4);
+            });
+        }
+
+        window.addEventListener('resize', drawMiniChart);
+
+        initApp();
+    </script>
+</body>
+</html>
