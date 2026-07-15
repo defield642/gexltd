@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GEX TECH</title>
+    <title>GEX-TECH Private Wealth Portal</title>
     <link rel="icon" type="image/jpeg" href="icon.jpg">
     <link rel="apple-touch-icon" href="icon.jpg">
     <style>
@@ -1165,37 +1165,71 @@
             };
         }
 
-        function initApp() {
-            const savedState = localStorage.getItem('gex_tech_portal_state');
-            if (savedState) {
-                try {
-                    state = JSON.parse(savedState);
-                } catch(e) {
-                    state = { investors: [] };
+        function normalizeState(rawState) {
+            const next = rawState && typeof rawState === 'object' ? { ...rawState } : { investors: [] };
+            next.investors = Array.isArray(next.investors) ? next.investors.map(normalizeInvestor) : [];
+            return next;
+        }
+
+        async function loadState() {
+            try {
+                const response = await fetch('/api/state', { headers: { Accept: 'application/json' } });
+                if (!response.ok) throw new Error(`Failed to load state: ${response.status}`);
+                const serverState = normalizeState(await response.json());
+
+                if (serverState.investors.length === 0) {
+                    const cachedState = localStorage.getItem('gex_tech_portal_state');
+                    if (cachedState) {
+                        try {
+                            return normalizeState(JSON.parse(cachedState));
+                        } catch (error) {
+                            console.warn('Ignoring invalid cached state', error);
+                        }
+                    }
                 }
+
+                return serverState;
+            } catch (error) {
+                console.error('Using empty state because load failed:', error);
+                const cachedState = localStorage.getItem('gex_tech_portal_state');
+                if (cachedState) {
+                    try {
+                        return normalizeState(JSON.parse(cachedState));
+                    } catch (cacheError) {
+                        console.warn('Ignoring invalid cached state', cacheError);
+                    }
+                }
+                return normalizeState({ investors: [] });
             }
-            if (!state.investors) state.investors = [];
-            state.investors = state.investors.map(normalizeInvestor);
-            migrateTransactions();
-            saveState();
-            render();
-            drawMiniChart();
+        }
+
+        async function saveState() {
+            state = normalizeState(state);
+            const response = await fetch('/api/state', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ state })
+            });
+            if (!response.ok) {
+                throw new Error(`Failed to save state: ${response.status}`);
+            }
+            return response.json();
         }
 
         function migrateTransactions() {
-            state.investors.forEach(inv => {
-                if (!inv.transactions) {
-                    inv.transactions = [{
-                        amount: inv.totalInvestment,
-                        date: new Date().toISOString().split('T')[0],
-                        type: 'initial'
-                    }];
-                }
-            });
+            state = normalizeState(state);
         }
 
-        function saveState() {
-            localStorage.setItem('gex_tech_portal_state', JSON.stringify(state));
+        async function initApp() {
+            state = await loadState();
+            migrateTransactions();
+            try {
+                await saveState();
+            } catch (error) {
+                console.error('Initial save failed:', error);
+            }
+            render();
+            drawMiniChart();
         }
 
         function isKeyVerified() {
@@ -1393,12 +1427,12 @@
         function confirmDelete(id, name) {
             pendingDeleteId = id;
             document.getElementById('confirm-text').innerHTML = `Are you sure you want to delete <span class="confirm-name">${escapeHtml(name)}</span>?<br><br>This action cannot be undone.`;
-            document.getElementById('confirm-btn').onclick = function() {
+            document.getElementById('confirm-btn').onclick = async function() {
                 state.investors = state.investors.filter(i => i.id !== pendingDeleteId);
-                saveState();
                 render();
                 closeModal('confirm-modal');
                 pendingDeleteId = null;
+                void persistState();
             };
             document.getElementById('confirm-modal').style.display = 'flex';
         }
@@ -1424,15 +1458,15 @@
                     return {
                         ...inv,
                         latestDeposit: amount,
-                        totalInvestment: inv.totalInvestment + amount
+                        totalInvestment: Number(inv.totalInvestment) + amount
                     };
                 }
                 return inv;
             });
 
-            saveState();
             render();
             closeModal('deposit-modal');
+            void persistState();
         }
 
         function addNewInvestor() {
@@ -1457,9 +1491,9 @@
             };
 
             state.investors.push(newInv);
-            saveState();
             render();
             closeModal('add-investor-modal');
+            void persistState();
         }
 
         function saveRename() {
@@ -1470,9 +1504,9 @@
             state.investors = state.investors.map(inv =>
                 inv.id === id ? { ...inv, name } : inv
             );
-            saveState();
             render();
             closeModal('rename-modal');
+            void persistState();
         }
 
         function exportCSV() {
@@ -1492,6 +1526,15 @@
             a.download = 'gex_investors.csv';
             a.click();
             URL.revokeObjectURL(url);
+        }
+
+        async function persistState() {
+            try {
+                await saveState();
+            } catch (error) {
+                console.error('Failed to save state:', error);
+                alert('Failed to save changes to the server.');
+            }
         }
 
         function drawMiniChart() {
@@ -1561,7 +1604,7 @@
 
         window.addEventListener('resize', drawMiniChart);
 
-        initApp();
+        void initApp();
     </script>
 </body>
 </html>
